@@ -19,6 +19,8 @@
       cpg: "{{ cpg }}"
       size: "{{ size }}"
       size_unit: "{{ size_unit }}"
+    environment:
+      no_proxy: "{{ storage_system_ip }}"
       
   - name: Create Hosts
     hpe3par_host_facts:
@@ -26,6 +28,8 @@
       storage_system_username: "{{ storage_system_username }}"
       storage_system_password: "{{ storage_system_password }}"
     register: myhosts
+    environment:
+      no_proxy: "{{ storage_system_ip }}"
 
 
   - set_fact:
