@@ -1,0 +1,22 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    host_name: "10.3.1.9"
+
+  tasks:
+  - name: Create Hosts
+    hpe3par_host_facts:
+      storage_system_ip: "{{ storage_system_ip }}"
+      storage_system_username: "{{ storage_system_username }}"
+      storage_system_password: "{{ storage_system_password }}"
+    register: myhosts
+
+
+  - set_fact:
+      hostname: "{{ item.name }}"
+    when: '"50014380331546EC" in item.fcWWNs'
+    loop: "{{ myhosts.hosts }}"
+
+  - debug:
+      msg: "{{ hostname }}"
+
