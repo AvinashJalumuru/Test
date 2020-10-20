@@ -1,0 +1,32 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+  - vcenter_ip: "10.3.40.100"
+  - vcenter_username: "administrator@vsphere.local"
+  - vcenter_password: "P@ssw0rd123"
+  - datacenter_name: ''
+ - uuid: 423158a8-8e24-ba67-6512-c7c871ae0c28
+  tasks:
+  - name: Add disks to virtual machine using UUID
+    hpe_vmware_guest_disk:
+      hostname: "{{ vcenter_ip }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      validate_certs: no
+      uuid: "{{uuid}}"
+      disk:
+        - size: 1Gb
+          type: eagerzeroedthick
+          state: present
+          autoselect_datastore: True
+          scsi_controller: 1
+          scsi_type: 'lsilogicsas'
+          disk_mode: independent_persistent
+          sharing: true
+          unit_number: 0
+    delegate_to: localhost
+    register: disk_facts
+
+  - debug:
+      var: disk_facts
